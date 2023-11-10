@@ -13,11 +13,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 offset-md-3">
-					<div class="alert alert-danger text-center" role="alert" th:text="${alert_msg}">
-						A simple secondary alert—check it out!
-					</div>
+
+
 
 					<div class="my-card">
+						<div th:if="${session.message}"  th:classappend="${session.message.type}"  class="alert  text-center" role="alert">
+							<p th:text="${session.message.content}"></p>
+							<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+						</div>
 						<div class="container text-center">
 							<img class="mx-auto" width="80:px" th:src="@{/img/membership.png}" />
 							<h3 class="text-center">Signup Here</h3>
@@ -30,16 +33,13 @@
 							<div class="form-group mt-3">
 
 								<label for="name_field"> <span class="sr-only"></span>Enter Your Name</label>
-								<input type="text" name="name" 
-								
-								th:classappend="${#fields.hasErrors('name')? 'is-invalid':''}"
-								class="form-control" 
-								id="name_field"
-									th:value="${user.name}" aria-describedby="nameHelp" placeholder="Name">
+								<input type="text" name="name"
+									th:classappend="${#fields.hasErrors('name')? 'is-invalid':''}" class="form-control"
+									id="name_field" th:value="${user.name}" aria-describedby="nameHelp"
+									placeholder="Name">
 
 
-								<div th:each="e : ${#fields.errors('name')}" th:text="${e}"
-									class="invalid-feedback">
+								<div th:each="e : ${#fields.errors('name')}" th:text="${e}" class="invalid-feedback">
 									Please provide a User Name.
 								</div>
 							</div>
@@ -48,42 +48,41 @@
 							<!--Email field-->
 							<div class="form-group">
 								<label for="email_field">Enter Your Email</label>
-								<input type="email" name="email" 
-								th:classappend="${#fields.hasErrors('email')? 'is-invalid':''}"
-								class="form-control" id="email_field"
-									th:value="${user.email}" aria-describedby="nameHelp" placeholder="Email"
-									required="required">
-									
-									<div th:each="e : ${#fields.errors('email')}" th:text="${e}"  class="invalid-feedback">
-							Please provide valid Email
-						</div>
+								<input type="email" name="email"
+									th:classappend="${#fields.hasErrors('email')? 'is-invalid':''}" class="form-control"
+									id="email_field" th:value="${user.email}" aria-describedby="nameHelp"
+									placeholder="Email" required="required">
+
+								<div th:each="e : ${#fields.errors('email')}" th:text="${e}" class="invalid-feedback">
+									Please provide valid Email
+								</div>
 
 							</div>
 
 							<!--Password field-->
 							<div class="form-group">
 								<label for="password_field">Enter Your Password</label>
-								<input type="password" name="password" 
-								th:classappend="${#fields.hasErrors('password')? 'is-invalid':''}"
-								class="form-control" id="password_field"
-									aria-describedby="nameHelp" placeholder="Password" required="required">
-									<div th:each="e : ${#fields.errors('password')}" th:text="${e}"  class="invalid-feedback">
-							Please provide correct password pattern
-						</div>
+								<input type="password" name="password"
+									th:classappend="${#fields.hasErrors('password')? 'is-invalid':''}"
+									class="form-control" id="password_field" aria-describedby="nameHelp"
+									placeholder="Password" required="required">
+								<div th:each="e : ${#fields.errors('password')}" th:text="${e}"
+									class="invalid-feedback">
+									Please provide correct password pattern
+								</div>
 
 							</div>
 
 							<!--About Field-->
 							<div class="form-group">
 								<label for="exampleFormControlTextarea1">About</label>
-								<textarea class="form-control" 
-								name="about" th:text="${user.about}"
+								<textarea class="form-control" name="about" th:text="${user.about}"
 									th:classappend="${#fields.hasErrors('about')? 'is-invalid':''}"
 									id="exampleFormControlTextarea1" rows="5"
 									placeholder="Enter soemthing about yourself" required></textarea>
-									<div th:each="e : ${#fields.errors('about')}" th:text="${e}"  class="invalid-feedback">
-							Please provide about field
-						</div>
+								<div th:each="e : ${#fields.errors('about')}" th:text="${e}" class="invalid-feedback">
+									Please provide about field
+								</div>
 							</div>
 
 							<div class="form-group form-check">

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smart.dao.UserRepository;
 import com.smart.entities.User;
+import com.smart.helper.Message;
+
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -43,25 +46,41 @@ public class HomeController {
 	
 	@PostMapping("/do_register")
 	public String registerUser( @Valid  @ModelAttribute("user") User user, BindingResult result,
-			@RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model) {
+			@RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model,HttpSession session) {
 		
 		System.out.println(user);
 		
-		if (!agreement) {
+		
+		try {
 			
-			model.addAttribute("alert_msg","Please check t&c box");
+			if (!agreement) {
+				
+				
+				
+				throw new Exception("Please check terms & conditions box");
+				
+			}
+			if(result.hasErrors()) {
+				model.addAttribute("user",user);
+				System.out.println(result.toString());
+				return "signup";
+			}
+			
+			user.setRole("ROLE_USER");
+			user.setEnabled(true);
+			user.setImageUrl("default.png");
+			model.addAttribute("user",new User());
+			session.setAttribute("message", new Message("Successfully Registered","alert-success"));
 			return "signup";
-		}
-		if(result.hasErrors()) {
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			//e.printStackTrace();
 			model.addAttribute("user",user);
-			System.out.println(result.toString());
+			session.setAttribute("message", new Message(""+e.getMessage(),"alert-danger"));
 			return "signup";
 		}
-		
-		user.setRole("ROLE_USER");
-		user.setEnabled(true);
-		
-		return "success";
 		
 		
 					
